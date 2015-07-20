@@ -29,7 +29,7 @@ declare function birtsearch:get(
    let $l := xdmp:log(fn:concat("The $var is: ", xdmp:describe($params)))
    let $t := xdmp:log(fn:concat("The $expression is: ", xdmp:describe(doc($expression))))
     let $content := <searchresult>
-                       { cts:search(//SPEECH,  cts:word-query("Sweet flower, with flowers thy bridal bed I strew")) }
+                       { cts:search(//SPEECH,  cts:word-query($q)) }
                      </searchresult>
       
  (:
