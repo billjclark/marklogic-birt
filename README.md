@@ -20,18 +20,23 @@ git clone https://github.com/marklogic/marklogic-birt
 
 This application is designed to run on MarkLogic Server 8.0 and later.  We also recommend using the latest version of BIRT.
 
-The example reports in this project use the Shakespeare XML Source for the Plays MarkLogic Database. See the Bill Gethub project at https://github.com/marklogic/bill for details.
+The example reports in this project use the Shakespeare XML Source for the Plays MarkLogic Database. See the Bill Github project at https://github.com/marklogic/bill for details.
 
 ## Configuration Steps
 
 To generate MarkLogic BIRT reports from any web server, you must: 
 
 1) Install MarkLogic Server.
-2) Install the "bill" database on the MarkLogic server.
-3) Install a webserver such as tomcat, JBOSS, or BIRT iHub.  Tomcat is optimal for the open source version of BIRT.  iHub allows you to take full advantage of the comercial features of BIRT.  Some of the features include best of breed excel export, third party HTML5 charting, and dashboards.
-4) Add the project files to your web application from this github project.  
-5) Install curl.
-6) Installs the BIRT search REST extension by executing the Curl command that  that is found in birtsearch.bat.
+2) If you want to see working sample reports, install the "bill" database on the MarkLogic server.  Otherwise, create and populate the database that you want to report on.
+3) Create a MarkLogic HTTP server for the database that you want to report on.
+4) Set the HTTP server authentication level to "application-level."  (The open source BIRT xml data source has no way of asking for a username/password.)
+5) Install a webserver such as tomcat, JBOSS, or BIRT iHub.  Tomcat is optimal for the open source version of BIRT.  iHub allows you to take full advantage of the comercial features of BIRT.  Some of the iHub features include best of breed excel export, third party HTML5 charting, interactive report viewer, and dashboards.
+6) Add the marklogic-birt project files to your web application from this github project.  For Tomcat, simply place a copy of the marklogic-birt directory in the Tomcat webapps directory.  Typically, the path is C:\Program Files\Apache Software Foundation\Tomcat 8.0\webapps.
+7) Install curl.
+8) Create the BIRT search REST extension by executing the Curl command that is found in birtsearch.bat.
+9) Download and install the Eclipse BIRT Report Designer found at http://www.eclipse.org/birt/.
+					--OR--
+   Alternatively, you can install the commercial OpenText BIRT Designer if you want to use the BIRT iHub Server.
 
 ## How to create a New BIRT report
 
