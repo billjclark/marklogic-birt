@@ -15,7 +15,7 @@ For the instructions, we are going to assume that the user is new to both MarkLo
 To start, clone this repository and then download the Eclipse BIRT project at http://www.eclipse.org/birt/. For example, run the following command:  
 
 ```
-git clone https://github.com/marklogic/marklogic-birt
+git clone https://github.com/billjclark/marklogic-birt
 
 
 This application is designed to run on MarkLogic Server 8.0 and later.  We also recommend using the latest version of BIRT.
@@ -38,7 +38,7 @@ To generate MarkLogic BIRT reports from any web server, you must:
 					--OR--
    Alternatively, you can install the commercial OpenText BIRT Designer if you want to use the BIRT iHub Server.
 
-## How to create a New BIRT report
+## How to create a New XML BIRT report
 
 Before you start creating your own reports, I suggest that you study how document.rptdesign and search.rptdesign are built.  These files are xml files so you can look at them in a xml editor and the Eclipse report designer.  The MarkLogic specific parts of the report to focus on are:
 
@@ -78,6 +78,10 @@ this.setExtensionProperty("FILELIST",newFileName);
 7) Create a new dataset that uses the new xml data source.  Follow the wizard.  The first step in creating a data set is to define the "row."  Generally chose the element that is the in the deepest layer of the hierarchy the then use xpath to get the parent elements and attributes.  After defining the "row," define the "columns."  
 8) Once the dataset(s) are created, use BIRT as if you are writing a SQL report.
 9) After you have finished laying out the elements of your report, copy it over to the web application where you are going to launch the report.
+
+## How to create a New JSON BIRT report
+
+## How to create a New ODBC BIRT report
 
 ## Important Files
 
