@@ -22,7 +22,7 @@
         </scalar-parameter>
     </parameters>
     <data-sources>
-        <oda-data-source extensionID="org.eclipse.datatools.enablement.oda.xml" name="Data Source" id="7">
+        <oda-data-source extensionID="org.eclipse.datatools.engagement.marklogic" name="ML Data Source" id="518">
             <method name="beforeOpen"><![CDATA[fileName = this.getExtensionProperty("FILELIST");
 if (params["docURI"].value != "z"){
 	newFileName = "http://localhost:8003/v1/documents?uri=/shakespeare/plays/" + params["docURI"].value;
@@ -35,26 +35,48 @@ this.setExtensionProperty("FILELIST",newFileName);]]></method>
         </oda-data-source>
     </data-sources>
     <data-sets>
-        <oda-data-set extensionID="org.eclipse.datatools.enablement.oda.xml.dataSet" name="Speaches Data Set" id="370">
+        <oda-data-set extensionID="org.eclipse.datatools.engagement.markogic.dataSet" name="Speeches Data Set" id="519">
+            <list-property name="computedColumns">
+                <structure>
+                    <property name="name">LineLength</property>
+                    <expression name="expression">row["LINE"].length</expression>
+                    <property name="dataType">integer</property>
+                </structure>
+                <structure>
+                    <property name="name">WordCount</property>
+                    <expression name="expression">row["LINE"].split(' ').length</expression>
+                    <property name="dataType">integer</property>
+                </structure>
+            </list-property>
             <list-property name="columnHints">
                 <structure>
                     <property name="columnName">ACT TITLE</property>
                     <property name="analysis">dimension</property>
+                    <property name="onColumnLayout">false</property>
                     <text-property name="heading">ACT TITLE</text-property>
                 </structure>
                 <structure>
-                    <property name="columnName">SCENE TITLE</property>
+                    <property name="columnName">STAGEDIR</property>
                     <property name="analysis">dimension</property>
-                    <text-property name="heading">SCENE TITLE</text-property>
+                    <property name="onColumnLayout">false</property>
+                    <text-property name="heading">STAGEDIR</text-property>
                 </structure>
                 <structure>
                     <property name="columnName">SPEAKER</property>
                     <property name="analysis">dimension</property>
+                    <property name="onColumnLayout">false</property>
                     <text-property name="heading">SPEAKER</text-property>
+                </structure>
+                <structure>
+                    <property name="columnName">Scene TITLE</property>
+                    <property name="analysis">dimension</property>
+                    <property name="onColumnLayout">false</property>
+                    <text-property name="heading">Scene TITLE</text-property>
                 </structure>
                 <structure>
                     <property name="columnName">LINE</property>
                     <property name="analysis">dimension</property>
+                    <property name="onColumnLayout">false</property>
                     <text-property name="heading">LINE</text-property>
                 </structure>
             </list-property>
@@ -68,7 +90,7 @@ this.setExtensionProperty("FILELIST",newFileName);]]></method>
                     </structure>
                     <structure>
                         <property name="position">2</property>
-                        <property name="name">SCENE TITLE</property>
+                        <property name="name">STAGEDIR</property>
                         <property name="dataType">string</property>
                     </structure>
                     <structure>
@@ -78,12 +100,27 @@ this.setExtensionProperty("FILELIST",newFileName);]]></method>
                     </structure>
                     <structure>
                         <property name="position">4</property>
+                        <property name="name">Scene TITLE</property>
+                        <property name="dataType">string</property>
+                    </structure>
+                    <structure>
+                        <property name="position">5</property>
                         <property name="name">LINE</property>
                         <property name="dataType">string</property>
                     </structure>
+                    <structure>
+                        <property name="position">6</property>
+                        <property name="name">LineLength</property>
+                        <property name="dataType">integer</property>
+                    </structure>
+                    <structure>
+                        <property name="position">7</property>
+                        <property name="name">WordCount</property>
+                        <property name="dataType">integer</property>
+                    </structure>
                 </list-property>
             </structure>
-            <property name="dataSource">Data Source</property>
+            <property name="dataSource">ML Data Source</property>
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
@@ -94,8 +131,8 @@ this.setExtensionProperty("FILELIST",newFileName);]]></method>
                 </structure>
                 <structure>
                     <property name="position">2</property>
-                    <property name="name">SCENE TITLE</property>
-                    <property name="nativeName">SCENE TITLE</property>
+                    <property name="name">STAGEDIR</property>
+                    <property name="nativeName">STAGEDIR</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
@@ -108,13 +145,20 @@ this.setExtensionProperty("FILELIST",newFileName);]]></method>
                 </structure>
                 <structure>
                     <property name="position">4</property>
+                    <property name="name">Scene TITLE</property>
+                    <property name="nativeName">Scene TITLE</property>
+                    <property name="dataType">string</property>
+                    <property name="nativeDataType">12</property>
+                </structure>
+                <structure>
+                    <property name="position">5</property>
                     <property name="name">LINE</property>
                     <property name="nativeName">LINE</property>
                     <property name="dataType">string</property>
                     <property name="nativeDataType">12</property>
                 </structure>
             </list-property>
-            <xml-property name="queryText"><![CDATA[table0#-TNAME-#table0#:#[/PLAY/ACT/SCENE/SPEECH]#:#{ACT TITLE;STRING;../../TITLE},{SCENE TITLE;STRING;../TITLE},{SPEAKER;STRING;SPEAKER},{LINE;STRING;LINE}]]></xml-property>
+            <xml-property name="queryText"><![CDATA[table0#-TNAME-#table0#:#[/PLAY/ACT/SCENE/SPEECH/LINE]#:#{ACT TITLE;STRING;../../../TITLE},{STAGEDIR;STRING;../STAGEDIR},{SPEAKER;STRING;../SPEAKER},{Scene TITLE;STRING;../../TITLE},{LINE;STRING;}]]></xml-property>
             <xml-property name="designerValues"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
 <model:DesignValues xmlns:design="http://www.eclipse.org/datatools/connectivity/oda/design" xmlns:model="http://www.eclipse.org/birt/report/model/adapter/odaModel">
   <Version>2.0</Version>
@@ -124,40 +168,8 @@ this.setExtensionProperty("FILELIST",newFileName);]]></method>
         <design:resultColumnDefinitions>
           <design:attributes>
             <design:identifier>
-              <design:name>Act TITLE</design:name>
-              <design:position>1</design:position>
-            </design:identifier>
-            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
-            <design:precision>-1</design:precision>
-            <design:scale>-1</design:scale>
-            <design:nullability>Unknown</design:nullability>
-          </design:attributes>
-          <design:usageHints>
-            <design:label>Act TITLE</design:label>
-            <design:formattingHints/>
-          </design:usageHints>
-        </design:resultColumnDefinitions>
-        <design:resultColumnDefinitions>
-          <design:attributes>
-            <design:identifier>
-              <design:name>Scene TITLE</design:name>
-              <design:position>2</design:position>
-            </design:identifier>
-            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
-            <design:precision>-1</design:precision>
-            <design:scale>-1</design:scale>
-            <design:nullability>Unknown</design:nullability>
-          </design:attributes>
-          <design:usageHints>
-            <design:label>Scene TITLE</design:label>
-            <design:formattingHints/>
-          </design:usageHints>
-        </design:resultColumnDefinitions>
-        <design:resultColumnDefinitions>
-          <design:attributes>
-            <design:identifier>
               <design:name>SPEAKER</design:name>
-              <design:position>3</design:position>
+              <design:position>1</design:position>
             </design:identifier>
             <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
             <design:precision>-1</design:precision>
@@ -173,7 +185,7 @@ this.setExtensionProperty("FILELIST",newFileName);]]></method>
           <design:attributes>
             <design:identifier>
               <design:name>LINE</design:name>
-              <design:position>4</design:position>
+              <design:position>2</design:position>
             </design:identifier>
             <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
             <design:precision>-1</design:precision>
@@ -182,6 +194,54 @@ this.setExtensionProperty("FILELIST",newFileName);]]></method>
           </design:attributes>
           <design:usageHints>
             <design:label>LINE</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>STAGEDIR</design:name>
+              <design:position>3</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>STAGEDIR</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>Scene TITLE</design:name>
+              <design:position>4</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>Scene TITLE</design:label>
+            <design:formattingHints/>
+          </design:usageHints>
+        </design:resultColumnDefinitions>
+        <design:resultColumnDefinitions>
+          <design:attributes>
+            <design:identifier>
+              <design:name>ACT TITLE</design:name>
+              <design:position>5</design:position>
+            </design:identifier>
+            <design:nativeDataTypeCode>12</design:nativeDataTypeCode>
+            <design:precision>-1</design:precision>
+            <design:scale>-1</design:scale>
+            <design:nullability>Unknown</design:nullability>
+          </design:attributes>
+          <design:usageHints>
+            <design:label>ACT TITLE</design:label>
             <design:formattingHints/>
           </design:usageHints>
         </design:resultColumnDefinitions>
@@ -237,6 +297,7 @@ this.setExtensionProperty("FILELIST",newFileName);]]></method>
     </styles>
     <page-setup>
         <simple-master-page name="Simple MasterPage" id="2">
+            <property name="leftMargin">0.5in</property>
             <page-footer>
                 <text id="3">
                     <property name="contentType">html</property>
@@ -246,1405 +307,520 @@ this.setExtensionProperty("FILELIST",newFileName);]]></method>
         </simple-master-page>
     </page-setup>
     <body>
-        <extended-item extensionName="Chart" id="482">
-            <xml-property name="xmlRepresentation"><![CDATA[<model:ChartWithAxes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:attribute="http://www.birt.eclipse.org/ChartModelAttribute" xmlns:data="http://www.birt.eclipse.org/ChartModelData" xmlns:layout="http://www.birt.eclipse.org/ChartModelLayout" xmlns:model="http://www.birt.eclipse.org/ChartModel" xmlns:type="http://www.birt.eclipse.org/ChartModelType">
-  <Version>2.6.1</Version>
-  <Type>Bar Chart</Type>
-  <SubType>Side-by-side</SubType>
-  <Block>
-    <Children xsi:type="layout:TitleBlock">
-      <Bounds>
-        <Left>0.0</Left>
-        <Top>0.0</Top>
-        <Width>0.0</Width>
-        <Height>0.0</Height>
-      </Bounds>
-      <Insets>
-        <Top>3.0</Top>
-        <Left>3.0</Left>
-        <Bottom>3.0</Bottom>
-        <Right>3.0</Right>
-      </Insets>
-      <Row>-1</Row>
-      <Column>-1</Column>
-      <Rowspan>-1</Rowspan>
-      <Columnspan>-1</Columnspan>
-      <Outline>
-        <Style>Solid</Style>
-        <Thickness>1</Thickness>
-        <Color>
-          <Transparency>255</Transparency>
-          <Red>0</Red>
-          <Green>0</Green>
-          <Blue>0</Blue>
-        </Color>
-        <Visible>false</Visible>
-      </Outline>
-      <Visible>true</Visible>
-      <Label>
-        <Caption>
-          <Value>Number of Lines</Value>
-          <Font>
-            <Size>16.0</Size>
-            <Bold>true</Bold>
-            <Alignment>
-              <horizontalAlignment>Center</horizontalAlignment>
-              <verticalAlignment>Center</verticalAlignment>
-            </Alignment>
-          </Font>
-        </Caption>
-        <Background xsi:type="attribute:ColorDefinition">
-          <Transparency>0</Transparency>
-          <Red>255</Red>
-          <Green>255</Green>
-          <Blue>255</Blue>
-        </Background>
-        <Outline>
-          <Style>Solid</Style>
-          <Thickness>1</Thickness>
-          <Color>
-            <Transparency>255</Transparency>
-            <Red>0</Red>
-            <Green>0</Green>
-            <Blue>0</Blue>
-          </Color>
-        </Outline>
-        <Insets>
-          <Top>0.0</Top>
-          <Left>2.0</Left>
-          <Bottom>0.0</Bottom>
-          <Right>3.0</Right>
-        </Insets>
-        <Visible>true</Visible>
-      </Label>
-    </Children>
-    <Children xsi:type="layout:Plot">
-      <Bounds>
-        <Left>0.0</Left>
-        <Top>0.0</Top>
-        <Width>0.0</Width>
-        <Height>0.0</Height>
-      </Bounds>
-      <Insets>
-        <Top>3.0</Top>
-        <Left>3.0</Left>
-        <Bottom>3.0</Bottom>
-        <Right>3.0</Right>
-      </Insets>
-      <Row>-1</Row>
-      <Column>-1</Column>
-      <Rowspan>-1</Rowspan>
-      <Columnspan>-1</Columnspan>
-      <Outline>
-        <Style>Solid</Style>
-        <Thickness>1</Thickness>
-        <Color>
-          <Transparency>255</Transparency>
-          <Red>0</Red>
-          <Green>0</Green>
-          <Blue>0</Blue>
-        </Color>
-        <Visible>false</Visible>
-      </Outline>
-      <Visible>true</Visible>
-      <HorizontalSpacing>5</HorizontalSpacing>
-      <VerticalSpacing>5</VerticalSpacing>
-      <ClientArea>
-        <Outline>
-          <Style>Solid</Style>
-          <Thickness>0</Thickness>
-          <Color>
-            <Transparency>255</Transparency>
-            <Red>0</Red>
-            <Green>0</Green>
-            <Blue>0</Blue>
-          </Color>
-          <Visible>false</Visible>
-        </Outline>
-        <Insets>
-          <Top>0.0</Top>
-          <Left>0.0</Left>
-          <Bottom>0.0</Bottom>
-          <Right>0.0</Right>
-        </Insets>
-      </ClientArea>
-    </Children>
-    <Children xsi:type="layout:Legend">
-      <Bounds>
-        <Left>0.0</Left>
-        <Top>0.0</Top>
-        <Width>0.0</Width>
-        <Height>0.0</Height>
-      </Bounds>
-      <Insets>
-        <Top>3.0</Top>
-        <Left>3.0</Left>
-        <Bottom>3.0</Bottom>
-        <Right>3.0</Right>
-      </Insets>
-      <Row>-1</Row>
-      <Column>-1</Column>
-      <Rowspan>-1</Rowspan>
-      <Columnspan>-1</Columnspan>
-      <Outline>
-        <Style>Solid</Style>
-        <Thickness>1</Thickness>
-        <Color>
-          <Transparency>255</Transparency>
-          <Red>0</Red>
-          <Green>0</Green>
-          <Blue>0</Blue>
-        </Color>
-        <Visible>false</Visible>
-      </Outline>
-      <Visible>true</Visible>
-      <ClientArea>
-        <Outline>
-          <Style>Solid</Style>
-          <Thickness>0</Thickness>
-          <Color>
-            <Transparency>255</Transparency>
-            <Red>0</Red>
-            <Green>0</Green>
-            <Blue>0</Blue>
-          </Color>
-          <Visible>false</Visible>
-        </Outline>
-        <Insets>
-          <Top>2.0</Top>
-          <Left>2.0</Left>
-          <Bottom>2.0</Bottom>
-          <Right>2.0</Right>
-        </Insets>
-      </ClientArea>
-      <Text>
-        <Value></Value>
-        <Font>
-          <Alignment/>
-        </Font>
-      </Text>
-      <Orientation>Vertical</Orientation>
-      <Direction>Top_Bottom</Direction>
-      <Separator>
-        <Style>Solid</Style>
-        <Thickness>1</Thickness>
-        <Color>
-          <Transparency>255</Transparency>
-          <Red>0</Red>
-          <Green>0</Green>
-          <Blue>0</Blue>
-        </Color>
-        <Visible>true</Visible>
-      </Separator>
-      <Position>Right</Position>
-      <ItemType>Series</ItemType>
-      <Title>
-        <Caption>
-          <Value></Value>
-          <Font>
-            <Alignment/>
-          </Font>
-        </Caption>
-        <Background xsi:type="attribute:ColorDefinition">
-          <Transparency>0</Transparency>
-          <Red>255</Red>
-          <Green>255</Green>
-          <Blue>255</Blue>
-        </Background>
-        <Outline>
-          <Style>Solid</Style>
-          <Thickness>1</Thickness>
-          <Color>
-            <Transparency>255</Transparency>
-            <Red>0</Red>
-            <Green>0</Green>
-            <Blue>0</Blue>
-          </Color>
-          <Visible>false</Visible>
-        </Outline>
-        <Insets>
-          <Top>0.0</Top>
-          <Left>2.0</Left>
-          <Bottom>0.0</Bottom>
-          <Right>3.0</Right>
-        </Insets>
-        <Visible>false</Visible>
-      </Title>
-      <TitlePosition>Above</TitlePosition>
-    </Children>
-    <Bounds>
-      <Left>0.0</Left>
-      <Top>0.0</Top>
-      <Width>212.0</Width>
-      <Height>130.0</Height>
-    </Bounds>
-    <Insets>
-      <Top>3.0</Top>
-      <Left>3.0</Left>
-      <Bottom>3.0</Bottom>
-      <Right>3.0</Right>
-    </Insets>
-    <Row>-1</Row>
-    <Column>-1</Column>
-    <Rowspan>-1</Rowspan>
-    <Columnspan>-1</Columnspan>
-    <Outline>
-      <Style>Solid</Style>
-      <Thickness>1</Thickness>
-      <Color>
-        <Transparency>255</Transparency>
-        <Red>0</Red>
-        <Green>0</Green>
-        <Blue>0</Blue>
-      </Color>
-      <Visible>false</Visible>
-    </Outline>
-    <Visible>true</Visible>
-  </Block>
-  <Dimension>Two_Dimensional</Dimension>
-  <Units>Points</Units>
-  <SeriesThickness>10.0</SeriesThickness>
-  <ExtendedProperties>
-    <Name>enable.area.alt</Name>
-    <Value>false</Value>
-  </ExtendedProperties>
-  <SampleData>
-    <BaseSampleData>
-      <DataSetRepresentation>A, B, C</DataSetRepresentation>
-    </BaseSampleData>
-    <OrthogonalSampleData>
-      <DataSetRepresentation>5,4,12</DataSetRepresentation>
-      <SeriesDefinitionIndex>0</SeriesDefinitionIndex>
-    </OrthogonalSampleData>
-  </SampleData>
-  <Interactivity/>
-  <EmptyMessage>
-    <Caption>
-      <Value>This chart contains no data.</Value>
-      <Font>
-        <Alignment>
-          <horizontalAlignment>Center</horizontalAlignment>
-          <verticalAlignment>Center</verticalAlignment>
-        </Alignment>
-      </Font>
-    </Caption>
-    <Background xsi:type="attribute:ColorDefinition">
-      <Transparency>64</Transparency>
-      <Red>127</Red>
-      <Green>127</Green>
-      <Blue>127</Blue>
-    </Background>
-    <Outline>
-      <Color>
-        <Transparency>128</Transparency>
-        <Red>127</Red>
-        <Green>127</Green>
-        <Blue>127</Blue>
-      </Color>
-      <Visible>true</Visible>
-    </Outline>
-    <Insets>
-      <Top>10.0</Top>
-      <Left>10.0</Left>
-      <Bottom>10.0</Bottom>
-      <Right>10.0</Right>
-    </Insets>
-    <Visible>false</Visible>
-  </EmptyMessage>
-  <Axes>
-    <Type>Text</Type>
-    <Title>
-      <Caption>
-        <Value>X-Axis Title</Value>
-        <Font>
-          <Size>14.0</Size>
-          <Bold>true</Bold>
-          <Alignment>
-            <horizontalAlignment>Center</horizontalAlignment>
-            <verticalAlignment>Center</verticalAlignment>
-          </Alignment>
-        </Font>
-      </Caption>
-      <Background xsi:type="attribute:ColorDefinition">
-        <Transparency>0</Transparency>
-        <Red>255</Red>
-        <Green>255</Green>
-        <Blue>255</Blue>
-      </Background>
-      <Outline>
-        <Style>Solid</Style>
-        <Thickness>1</Thickness>
-        <Color>
-          <Transparency>255</Transparency>
-          <Red>0</Red>
-          <Green>0</Green>
-          <Blue>0</Blue>
-        </Color>
-      </Outline>
-      <Insets>
-        <Top>0.0</Top>
-        <Left>2.0</Left>
-        <Bottom>0.0</Bottom>
-        <Right>3.0</Right>
-      </Insets>
-      <Visible>false</Visible>
-    </Title>
-    <TitlePosition>Below</TitlePosition>
-    <AssociatedAxes>
-      <Type>Linear</Type>
-      <Title>
-        <Caption>
-          <Value>Y-Axis Title</Value>
-          <Font>
-            <Size>14.0</Size>
-            <Bold>true</Bold>
-            <Alignment>
-              <horizontalAlignment>Center</horizontalAlignment>
-              <verticalAlignment>Center</verticalAlignment>
-            </Alignment>
-          </Font>
-        </Caption>
-        <Background xsi:type="attribute:ColorDefinition">
-          <Transparency>0</Transparency>
-          <Red>255</Red>
-          <Green>255</Green>
-          <Blue>255</Blue>
-        </Background>
-        <Outline>
-          <Style>Solid</Style>
-          <Thickness>1</Thickness>
-          <Color>
-            <Transparency>255</Transparency>
-            <Red>0</Red>
-            <Green>0</Green>
-            <Blue>0</Blue>
-          </Color>
-        </Outline>
-        <Insets>
-          <Top>0.0</Top>
-          <Left>2.0</Left>
-          <Bottom>0.0</Bottom>
-          <Right>3.0</Right>
-        </Insets>
-        <Visible>false</Visible>
-      </Title>
-      <TitlePosition>Left</TitlePosition>
-      <SeriesDefinitions>
-        <Query>
-          <Definition></Definition>
-        </Query>
-        <SeriesPalette>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>80</Red>
-            <Green>166</Green>
-            <Blue>218</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>242</Red>
-            <Green>88</Green>
-            <Blue>106</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>232</Red>
-            <Green>172</Green>
-            <Blue>57</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>128</Red>
-            <Green>255</Green>
-            <Blue>128</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>64</Red>
-            <Green>128</Green>
-            <Blue>128</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>128</Red>
-            <Green>128</Green>
-            <Blue>192</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>170</Red>
-            <Green>85</Green>
-            <Blue>85</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>128</Red>
-            <Green>128</Green>
-            <Blue>0</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>192</Red>
-            <Green>192</Green>
-            <Blue>192</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>255</Red>
-            <Green>255</Green>
-            <Blue>128</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>128</Red>
-            <Green>192</Green>
-            <Blue>128</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>7</Red>
-            <Green>146</Green>
-            <Blue>94</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>0</Red>
-            <Green>128</Green>
-            <Blue>255</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>255</Red>
-            <Green>128</Green>
-            <Blue>192</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>0</Red>
-            <Green>255</Green>
-            <Blue>255</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>255</Red>
-            <Green>128</Green>
-            <Blue>128</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>0</Red>
-            <Green>128</Green>
-            <Blue>192</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>255</Red>
-            <Green>0</Green>
-            <Blue>255</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>128</Red>
-            <Green>64</Green>
-            <Blue>64</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>255</Red>
-            <Green>128</Green>
-            <Blue>64</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>80</Red>
-            <Green>240</Green>
-            <Blue>120</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>0</Red>
-            <Green>64</Green>
-            <Blue>128</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>128</Red>
-            <Green>0</Green>
-            <Blue>64</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>255</Red>
-            <Green>0</Green>
-            <Blue>128</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>128</Red>
-            <Green>128</Green>
-            <Blue>64</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>128</Red>
-            <Green>128</Green>
-            <Blue>128</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>255</Red>
-            <Green>128</Green>
-            <Blue>255</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>0</Red>
-            <Green>64</Green>
-            <Blue>0</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>0</Red>
-            <Green>0</Green>
-            <Blue>0</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>255</Red>
-            <Green>255</Green>
-            <Blue>255</Blue>
-          </Entries>
-          <Entries xsi:type="attribute:ColorDefinition">
-            <Transparency>255</Transparency>
-            <Red>255</Red>
-            <Green>128</Green>
-            <Blue>0</Blue>
-          </Entries>
-        </SeriesPalette>
-        <Series xsi:type="type:BarSeries">
-          <Visible>true</Visible>
-          <Label>
-            <Caption>
-              <Value></Value>
-              <Font>
-                <Alignment/>
-              </Font>
-            </Caption>
-            <Background xsi:type="attribute:ColorDefinition">
-              <Transparency>0</Transparency>
-              <Red>255</Red>
-              <Green>255</Green>
-              <Blue>255</Blue>
-            </Background>
-            <Outline>
-              <Style>Solid</Style>
-              <Thickness>1</Thickness>
-              <Color>
-                <Transparency>255</Transparency>
-                <Red>0</Red>
-                <Green>0</Green>
-                <Blue>0</Blue>
-              </Color>
-              <Visible>false</Visible>
-            </Outline>
-            <Insets>
-              <Top>0.0</Top>
-              <Left>2.0</Left>
-              <Bottom>0.0</Bottom>
-              <Right>3.0</Right>
-            </Insets>
-            <Visible>false</Visible>
-          </Label>
-          <DataDefinition>
-            <Definition>1</Definition>
-            <Grouping>
-              <GroupType>Text</GroupType>
-              <AggregateExpression>Sum</AggregateExpression>
-            </Grouping>
-          </DataDefinition>
-          <SeriesIdentifier>Series 1</SeriesIdentifier>
-          <DataPoint>
-            <Components>
-              <Type>Orthogonal_Value</Type>
-            </Components>
-            <Separator>, </Separator>
-          </DataPoint>
-          <LabelPosition>Outside</LabelPosition>
-          <Stacked>false</Stacked>
-          <Triggers>
-            <Condition>onmouseover</Condition>
-            <Action>
-              <Type>Show_Tooltip</Type>
-              <Value xsi:type="attribute:TooltipValue">
-                <Text></Text>
-                <Delay>200</Delay>
-              </Value>
-            </Action>
-          </Triggers>
-          <Riser>Rectangle</Riser>
-        </Series>
-        <Grouping>
-          <GroupType>Text</GroupType>
-          <AggregateExpression>Sum</AggregateExpression>
-        </Grouping>
-      </SeriesDefinitions>
-      <Orientation>Vertical</Orientation>
-      <LineAttributes>
-        <Style>Solid</Style>
-        <Thickness>1</Thickness>
-        <Color>
-          <Transparency>255</Transparency>
-          <Red>0</Red>
-          <Green>0</Green>
-          <Blue>0</Blue>
-        </Color>
-        <Visible>true</Visible>
-      </LineAttributes>
-      <Label>
-        <Caption>
-          <Value></Value>
-          <Font>
-            <Alignment/>
-          </Font>
-        </Caption>
-        <Background xsi:type="attribute:ColorDefinition">
-          <Transparency>0</Transparency>
-          <Red>255</Red>
-          <Green>255</Green>
-          <Blue>255</Blue>
-        </Background>
-        <Outline>
-          <Style>Solid</Style>
-          <Thickness>1</Thickness>
-          <Color>
-            <Transparency>255</Transparency>
-            <Red>0</Red>
-            <Green>0</Green>
-            <Blue>0</Blue>
-          </Color>
-        </Outline>
-        <Insets>
-          <Top>0.0</Top>
-          <Left>2.0</Left>
-          <Bottom>0.0</Bottom>
-          <Right>3.0</Right>
-        </Insets>
-        <Visible>true</Visible>
-      </Label>
-      <LabelPosition>Left</LabelPosition>
-      <MajorGrid>
-        <LineAttributes>
-          <Style>Solid</Style>
-          <Thickness>1</Thickness>
-          <Color>
-            <Transparency>255</Transparency>
-            <Red>196</Red>
-            <Green>196</Green>
-            <Blue>196</Blue>
-          </Color>
-          <Visible>false</Visible>
-        </LineAttributes>
-        <TickStyle>Across</TickStyle>
-        <TickAttributes>
-          <Style>Solid</Style>
-          <Thickness>1</Thickness>
-          <Color>
-            <Transparency>255</Transparency>
-            <Red>196</Red>
-            <Green>196</Green>
-            <Blue>196</Blue>
-          </Color>
-          <Visible>true</Visible>
-        </TickAttributes>
-      </MajorGrid>
-      <MinorGrid>
-        <LineAttributes>
-          <Style>Solid</Style>
-          <Thickness>1</Thickness>
-          <Color>
-            <Transparency>255</Transparency>
-            <Red>225</Red>
-            <Green>225</Green>
-            <Blue>225</Blue>
-          </Color>
-          <Visible>false</Visible>
-        </LineAttributes>
-        <TickStyle>Across</TickStyle>
-        <TickAttributes>
-          <Style>Solid</Style>
-          <Thickness>1</Thickness>
-          <Color>
-            <Transparency>255</Transparency>
-            <Red>225</Red>
-            <Green>225</Green>
-            <Blue>225</Blue>
-          </Color>
-          <Visible>false</Visible>
-        </TickAttributes>
-      </MinorGrid>
-      <Scale>
-        <MinorGridsPerUnit>5</MinorGridsPerUnit>
-      </Scale>
-      <Origin>
-        <Type>Min</Type>
-        <Value xsi:type="data:NumberDataElement">
-          <Value>0.0</Value>
-        </Value>
-      </Origin>
-      <PrimaryAxis>true</PrimaryAxis>
-      <Percent>false</Percent>
-    </AssociatedAxes>
-    <SeriesDefinitions>
-      <Query>
-        <Definition></Definition>
-      </Query>
-      <SeriesPalette>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>80</Red>
-          <Green>166</Green>
-          <Blue>218</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>242</Red>
-          <Green>88</Green>
-          <Blue>106</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>232</Red>
-          <Green>172</Green>
-          <Blue>57</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>128</Red>
-          <Green>255</Green>
-          <Blue>128</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>64</Red>
-          <Green>128</Green>
-          <Blue>128</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>128</Red>
-          <Green>128</Green>
-          <Blue>192</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>170</Red>
-          <Green>85</Green>
-          <Blue>85</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>128</Red>
-          <Green>128</Green>
-          <Blue>0</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>192</Red>
-          <Green>192</Green>
-          <Blue>192</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>255</Red>
-          <Green>255</Green>
-          <Blue>128</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>128</Red>
-          <Green>192</Green>
-          <Blue>128</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>7</Red>
-          <Green>146</Green>
-          <Blue>94</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>0</Red>
-          <Green>128</Green>
-          <Blue>255</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>255</Red>
-          <Green>128</Green>
-          <Blue>192</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>0</Red>
-          <Green>255</Green>
-          <Blue>255</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>255</Red>
-          <Green>128</Green>
-          <Blue>128</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>0</Red>
-          <Green>128</Green>
-          <Blue>192</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>255</Red>
-          <Green>0</Green>
-          <Blue>255</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>128</Red>
-          <Green>64</Green>
-          <Blue>64</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>255</Red>
-          <Green>128</Green>
-          <Blue>64</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>80</Red>
-          <Green>240</Green>
-          <Blue>120</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>0</Red>
-          <Green>64</Green>
-          <Blue>128</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>128</Red>
-          <Green>0</Green>
-          <Blue>64</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>255</Red>
-          <Green>0</Green>
-          <Blue>128</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>128</Red>
-          <Green>128</Green>
-          <Blue>64</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>128</Red>
-          <Green>128</Green>
-          <Blue>128</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>255</Red>
-          <Green>128</Green>
-          <Blue>255</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>0</Red>
-          <Green>64</Green>
-          <Blue>0</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>0</Red>
-          <Green>0</Green>
-          <Blue>0</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>255</Red>
-          <Green>255</Green>
-          <Blue>255</Blue>
-        </Entries>
-        <Entries xsi:type="attribute:ColorDefinition">
-          <Transparency>255</Transparency>
-          <Red>255</Red>
-          <Green>128</Green>
-          <Blue>0</Blue>
-        </Entries>
-      </SeriesPalette>
-      <Series>
-        <Visible>true</Visible>
-        <Label>
-          <Caption>
-            <Value></Value>
-            <Font>
-              <Alignment/>
-            </Font>
-          </Caption>
-          <Background xsi:type="attribute:ColorDefinition">
-            <Transparency>0</Transparency>
-            <Red>255</Red>
-            <Green>255</Green>
-            <Blue>255</Blue>
-          </Background>
-          <Outline>
-            <Style>Solid</Style>
-            <Thickness>1</Thickness>
-            <Color>
-              <Transparency>255</Transparency>
-              <Red>0</Red>
-              <Green>0</Green>
-              <Blue>0</Blue>
-            </Color>
-            <Visible>false</Visible>
-          </Outline>
-          <Insets>
-            <Top>0.0</Top>
-            <Left>2.0</Left>
-            <Bottom>0.0</Bottom>
-            <Right>3.0</Right>
-          </Insets>
-          <Visible>false</Visible>
-        </Label>
-        <DataDefinition>
-          <Definition>row[&quot;ACT TITLE&quot;]</Definition>
-        </DataDefinition>
-        <SeriesIdentifier></SeriesIdentifier>
-        <DataPoint>
-          <Components>
-            <Type>Orthogonal_Value</Type>
-          </Components>
-          <Separator>, </Separator>
-        </DataPoint>
-        <LabelPosition>Outside</LabelPosition>
-        <Stacked>false</Stacked>
-      </Series>
-      <Grouping>
-        <Enabled>true</Enabled>
-        <GroupType>Text</GroupType>
-        <AggregateExpression>Sum</AggregateExpression>
-      </Grouping>
-    </SeriesDefinitions>
-    <Orientation>Horizontal</Orientation>
-    <LineAttributes>
-      <Style>Solid</Style>
-      <Thickness>1</Thickness>
-      <Color>
-        <Transparency>255</Transparency>
-        <Red>0</Red>
-        <Green>0</Green>
-        <Blue>0</Blue>
-      </Color>
-      <Visible>true</Visible>
-    </LineAttributes>
-    <Label>
-      <Caption>
-        <Value></Value>
-        <Font>
-          <Alignment/>
-        </Font>
-      </Caption>
-      <Background xsi:type="attribute:ColorDefinition">
-        <Transparency>0</Transparency>
-        <Red>255</Red>
-        <Green>255</Green>
-        <Blue>255</Blue>
-      </Background>
-      <Outline>
-        <Style>Solid</Style>
-        <Thickness>1</Thickness>
-        <Color>
-          <Transparency>255</Transparency>
-          <Red>0</Red>
-          <Green>0</Green>
-          <Blue>0</Blue>
-        </Color>
-      </Outline>
-      <Insets>
-        <Top>0.0</Top>
-        <Left>2.0</Left>
-        <Bottom>0.0</Bottom>
-        <Right>3.0</Right>
-      </Insets>
-      <Visible>true</Visible>
-    </Label>
-    <LabelPosition>Below</LabelPosition>
-    <MajorGrid>
-      <LineAttributes>
-        <Style>Solid</Style>
-        <Thickness>1</Thickness>
-        <Color>
-          <Transparency>255</Transparency>
-          <Red>196</Red>
-          <Green>196</Green>
-          <Blue>196</Blue>
-        </Color>
-        <Visible>false</Visible>
-      </LineAttributes>
-      <TickStyle>Across</TickStyle>
-      <TickAttributes>
-        <Style>Solid</Style>
-        <Thickness>1</Thickness>
-        <Color>
-          <Transparency>255</Transparency>
-          <Red>196</Red>
-          <Green>196</Green>
-          <Blue>196</Blue>
-        </Color>
-        <Visible>true</Visible>
-      </TickAttributes>
-    </MajorGrid>
-    <MinorGrid>
-      <LineAttributes>
-        <Style>Solid</Style>
-        <Thickness>1</Thickness>
-        <Color>
-          <Transparency>255</Transparency>
-          <Red>225</Red>
-          <Green>225</Green>
-          <Blue>225</Blue>
-        </Color>
-        <Visible>false</Visible>
-      </LineAttributes>
-      <TickStyle>Across</TickStyle>
-      <TickAttributes>
-        <Style>Solid</Style>
-        <Thickness>1</Thickness>
-        <Color>
-          <Transparency>255</Transparency>
-          <Red>225</Red>
-          <Green>225</Green>
-          <Blue>225</Blue>
-        </Color>
-        <Visible>false</Visible>
-      </TickAttributes>
-    </MinorGrid>
-    <Scale>
-      <MinorGridsPerUnit>5</MinorGridsPerUnit>
-    </Scale>
-    <Origin>
-      <Type>Min</Type>
-      <Value xsi:type="data:NumberDataElement">
-        <Value>0.0</Value>
-      </Value>
-    </Origin>
-    <PrimaryAxis>true</PrimaryAxis>
-    <CategoryAxis>true</CategoryAxis>
-    <Percent>false</Percent>
-  </Axes>
-  <Orientation>Horizontal</Orientation>
-  <UnitSpacing>50.0</UnitSpacing>
-  <Rotation>
-    <Angles>
-      <XAngle>-20.0</XAngle>
-      <YAngle>45.0</YAngle>
-      <ZAngle>0.0</ZAngle>
-      <Type>None</Type>
-    </Angles>
-  </Rotation>
-</model:ChartWithAxes>
-]]></xml-property>
-            <property name="outputFormat">SVG</property>
-            <property name="inheritColumns">true</property>
-            <property name="height">130pt</property>
-            <property name="width">9.614583333333334in</property>
-            <property name="dataSet">Speaches Data Set</property>
-            <list-property name="boundDataColumns">
-                <structure>
-                    <property name="name">ACT TITLE</property>
-                    <expression name="expression" type="javascript">dataSetRow["ACT TITLE"]</expression>
-                    <property name="dataType">string</property>
-                </structure>
-                <structure>
-                    <property name="name">SCENE TITLE</property>
-                    <expression name="expression" type="javascript">dataSetRow["SCENE TITLE"]</expression>
-                    <property name="dataType">string</property>
-                </structure>
-                <structure>
-                    <property name="name">SPEAKER</property>
-                    <expression name="expression" type="javascript">dataSetRow["SPEAKER"]</expression>
-                    <property name="dataType">string</property>
-                </structure>
-                <structure>
-                    <property name="name">LINE</property>
-                    <expression name="expression" type="javascript">dataSetRow["LINE"]</expression>
-                    <property name="dataType">string</property>
-                </structure>
-            </list-property>
-        </extended-item>
-        <table id="427">
-            <property name="borderBottomStyle">none</property>
-            <property name="borderLeftStyle">none</property>
-            <property name="borderRightStyle">none</property>
-            <property name="borderTopStyle">none</property>
-            <property name="dataSet">Speaches Data Set</property>
-            <list-property name="boundDataColumns">
-                <structure>
-                    <property name="name">ACT TITLE</property>
-                    <text-property name="displayName">ACT TITLE</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["ACT TITLE"]</expression>
-                    <property name="dataType">string</property>
-                </structure>
-                <structure>
-                    <property name="name">SCENE TITLE</property>
-                    <text-property name="displayName">SCENE TITLE</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["SCENE TITLE"]</expression>
-                    <property name="dataType">string</property>
-                </structure>
-                <structure>
-                    <property name="name">SPEAKER</property>
-                    <text-property name="displayName">SPEAKER</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["SPEAKER"]</expression>
-                    <property name="dataType">string</property>
-                </structure>
-                <structure>
-                    <property name="name">LINE</property>
-                    <text-property name="displayName">LINE</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["LINE"]</expression>
-                    <property name="dataType">string</property>
-                </structure>
-            </list-property>
-            <column id="451">
-                <property name="width">0.75in</property>
+        <grid id="520">
+            <column id="623">
+                <property name="width">0.5in</property>
             </column>
-            <column id="452">
-                <property name="width">3in</property>
-            </column>
-            <column id="453">
-                <property name="width">1.5in</property>
-            </column>
-            <column id="454">
-                <property name="width">5in</property>
-            </column>
-            <header>
-                <row id="428">
-                    <property name="backgroundColor">silver</property>
-                    <property name="fontWeight">bold</property>
-                    <cell id="429">
+            <column id="521"/>
+            <row id="522">
+                <cell id="617"/>
+                <cell id="523"/>
+            </row>
+            <row id="524">
+                <cell id="618"/>
+                <cell id="525">
+                    <property name="paddingLeft">30pt</property>
+                    <property name="textAlign">left</property>
+                    <table id="709">
                         <property name="borderBottomStyle">none</property>
                         <property name="borderLeftStyle">none</property>
                         <property name="borderRightStyle">none</property>
                         <property name="borderTopStyle">none</property>
-                        <label id="430">
-                            <text-property name="text">ACT TITLE</text-property>
-                        </label>
-                    </cell>
-                    <cell id="431">
-                        <property name="borderBottomStyle">none</property>
-                        <property name="borderLeftStyle">none</property>
-                        <property name="borderRightStyle">none</property>
-                        <property name="borderTopStyle">none</property>
-                        <label id="432">
-                            <text-property name="text">SCENE TITLE</text-property>
-                        </label>
-                    </cell>
-                    <cell id="433">
-                        <property name="borderBottomStyle">none</property>
-                        <property name="borderLeftStyle">none</property>
-                        <property name="borderRightStyle">none</property>
-                        <property name="borderTopStyle">none</property>
-                        <label id="434">
-                            <text-property name="text">SPEAKER</text-property>
-                        </label>
-                    </cell>
-                    <cell id="435">
-                        <property name="borderBottomStyle">none</property>
-                        <property name="borderLeftStyle">none</property>
-                        <property name="borderRightStyle">none</property>
-                        <property name="borderTopStyle">none</property>
-                        <label id="436">
-                            <text-property name="text">LINE</text-property>
-                        </label>
-                    </cell>
-                </row>
-            </header>
-            <group id="456">
-                <property name="groupName">Act</property>
-                <expression name="keyExpr" type="javascript">row["ACT TITLE"]</expression>
-                <structure name="toc">
-                    <expression name="expressionValue" type="javascript">row["ACT TITLE"]</expression>
-                </structure>
-                <property name="hideDetail">false</property>
-            </group>
-            <group id="468">
-                <property name="groupName">Scent</property>
-                <expression name="keyExpr" type="javascript">row["SCENE TITLE"]</expression>
-                <structure name="toc">
-                    <expression name="expressionValue" type="javascript">row["SCENE TITLE"]</expression>
-                </structure>
-                <property name="hideDetail">false</property>
-            </group>
-            <detail>
-                <row id="437">
-                    <cell id="438">
-                        <property name="borderBottomStyle">none</property>
-                        <property name="borderLeftStyle">none</property>
-                        <property name="borderRightStyle">none</property>
-                        <property name="borderTopStyle">none</property>
-                        <data id="480">
-                            <property name="resultSetColumn">ACT TITLE</property>
-                        </data>
-                    </cell>
-                    <cell id="440">
-                        <property name="borderBottomStyle">none</property>
-                        <property name="borderLeftStyle">none</property>
-                        <property name="borderRightStyle">none</property>
-                        <property name="borderTopStyle">none</property>
-                        <data id="481">
-                            <property name="resultSetColumn">SCENE TITLE</property>
-                        </data>
-                    </cell>
-                    <cell id="442">
-                        <property name="borderBottomStyle">none</property>
-                        <property name="borderLeftStyle">none</property>
-                        <property name="borderRightStyle">none</property>
-                        <property name="borderTopStyle">none</property>
-                        <data id="443">
-                            <property name="resultSetColumn">SPEAKER</property>
-                        </data>
-                    </cell>
-                    <cell id="444">
-                        <property name="borderBottomStyle">none</property>
-                        <property name="borderLeftStyle">none</property>
-                        <property name="borderRightStyle">none</property>
-                        <property name="borderTopStyle">none</property>
-                        <data id="445">
-                            <property name="resultSetColumn">LINE</property>
-                        </data>
-                    </cell>
-                </row>
-            </detail>
-            <footer>
-                <row id="446">
-                    <cell id="447">
-                        <property name="borderBottomStyle">none</property>
-                        <property name="borderLeftStyle">none</property>
-                        <property name="borderRightStyle">none</property>
-                        <property name="borderTopStyle">none</property>
-                    </cell>
-                    <cell id="448">
-                        <property name="borderBottomStyle">none</property>
-                        <property name="borderLeftStyle">none</property>
-                        <property name="borderRightStyle">none</property>
-                        <property name="borderTopStyle">none</property>
-                    </cell>
-                    <cell id="449">
-                        <property name="borderBottomStyle">none</property>
-                        <property name="borderLeftStyle">none</property>
-                        <property name="borderRightStyle">none</property>
-                        <property name="borderTopStyle">none</property>
-                    </cell>
-                    <cell id="450">
-                        <property name="borderBottomStyle">none</property>
-                        <property name="borderLeftStyle">none</property>
-                        <property name="borderRightStyle">none</property>
-                        <property name="borderTopStyle">none</property>
-                    </cell>
-                </row>
-            </footer>
-        </table>
-        <table id="483">
-            <property name="dataSet">Speaches Data Set</property>
-            <list-property name="boundDataColumns">
-                <structure>
-                    <property name="name">ACT TITLE</property>
-                    <text-property name="displayName">ACT TITLE</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["ACT TITLE"]</expression>
-                    <property name="dataType">string</property>
-                </structure>
-                <structure>
-                    <property name="name">SCENE TITLE</property>
-                    <text-property name="displayName">SCENE TITLE</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["SCENE TITLE"]</expression>
-                    <property name="dataType">string</property>
-                </structure>
-                <structure>
-                    <property name="name">SPEAKER</property>
-                    <text-property name="displayName">SPEAKER</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["SPEAKER"]</expression>
-                    <property name="dataType">string</property>
-                </structure>
-                <structure>
-                    <property name="name">LINE</property>
-                    <text-property name="displayName">LINE</text-property>
-                    <expression name="expression" type="javascript">dataSetRow["LINE"]</expression>
-                    <property name="dataType">string</property>
-                </structure>
-            </list-property>
-            <column id="507"/>
-            <column id="508"/>
-            <column id="509"/>
-            <column id="510"/>
-            <header>
-                <row id="484">
-                    <cell id="485">
-                        <label id="486">
-                            <text-property name="text">ACT TITLE</text-property>
-                        </label>
-                    </cell>
-                    <cell id="487">
-                        <label id="488">
-                            <text-property name="text">SCENE TITLE</text-property>
-                        </label>
-                    </cell>
-                    <cell id="489">
-                        <label id="490">
-                            <text-property name="text">SPEAKER</text-property>
-                        </label>
-                    </cell>
-                    <cell id="491">
-                        <label id="492">
-                            <text-property name="text">LINE</text-property>
-                        </label>
-                    </cell>
-                </row>
-            </header>
-            <detail>
-                <row id="493">
-                    <cell id="494">
-                        <data id="495">
-                            <property name="resultSetColumn">ACT TITLE</property>
-                        </data>
-                    </cell>
-                    <cell id="496">
-                        <data id="497">
-                            <property name="resultSetColumn">SCENE TITLE</property>
-                        </data>
-                    </cell>
-                    <cell id="498">
-                        <data id="499">
-                            <property name="resultSetColumn">SPEAKER</property>
-                        </data>
-                    </cell>
-                    <cell id="500">
-                        <data id="501">
-                            <property name="resultSetColumn">LINE</property>
-                        </data>
-                    </cell>
-                </row>
-            </detail>
-            <footer>
-                <row id="502">
-                    <cell id="503"/>
-                    <cell id="504"/>
-                    <cell id="505"/>
-                    <cell id="506"/>
-                </row>
-            </footer>
-        </table>
+                        <property name="dataSet">Speeches Data Set</property>
+                        <list-property name="boundDataColumns">
+                            <structure>
+                                <property name="name">ACT TITLE</property>
+                                <text-property name="displayName">ACT TITLE</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["ACT TITLE"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">SPEAKER</property>
+                                <text-property name="displayName">SPEAKER</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["SPEAKER"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">LineLength</property>
+                                <text-property name="displayName">LineLength</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["LineLength"]</expression>
+                                <property name="dataType">integer</property>
+                            </structure>
+                            <structure>
+                                <property name="name">WordCount</property>
+                                <text-property name="displayName">WordCount</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["WordCount"]</expression>
+                                <property name="dataType">integer</property>
+                            </structure>
+                            <structure>
+                                <property name="name">LINE</property>
+                                <text-property name="displayName">LINE</text-property>
+                                <expression name="expression" type="javascript">dataSetRow["LINE"]</expression>
+                                <property name="dataType">string</property>
+                            </structure>
+                            <structure>
+                                <property name="name">SpeakerLineCnt</property>
+                                <property name="dataType">integer</property>
+                                <simple-property-list name="aggregateOn">
+                                    <value>SpeakerGroup</value>
+                                </simple-property-list>
+                                <property name="aggregateFunction">COUNT</property>
+                                <list-property name="arguments">
+                                    <structure>
+                                        <property name="name">Expression</property>
+                                    </structure>
+                                </list-property>
+                                <property name="allowExport">true</property>
+                            </structure>
+                            <structure>
+                                <property name="name">lineLenAve</property>
+                                <property name="dataType">float</property>
+                                <simple-property-list name="aggregateOn">
+                                    <value>SpeakerGroup</value>
+                                </simple-property-list>
+                                <property name="aggregateFunction">AVE</property>
+                                <list-property name="arguments">
+                                    <structure>
+                                        <property name="name">Expression</property>
+                                        <expression name="value" type="javascript">row["LineLength"]</expression>
+                                    </structure>
+                                </list-property>
+                                <property name="allowExport">true</property>
+                            </structure>
+                            <structure>
+                                <property name="name">SpkrAveWordCount</property>
+                                <property name="dataType">float</property>
+                                <simple-property-list name="aggregateOn">
+                                    <value>SpeakerGroup</value>
+                                </simple-property-list>
+                                <property name="aggregateFunction">AVE</property>
+                                <list-property name="arguments">
+                                    <structure>
+                                        <property name="name">Expression</property>
+                                        <expression name="value" type="javascript">row["WordCount"]</expression>
+                                    </structure>
+                                </list-property>
+                                <property name="allowExport">true</property>
+                            </structure>
+                            <structure>
+                                <property name="name">ActLineCnt</property>
+                                <property name="dataType">integer</property>
+                                <simple-property-list name="aggregateOn">
+                                    <value>ActGroup</value>
+                                </simple-property-list>
+                                <property name="aggregateFunction">COUNT</property>
+                                <list-property name="arguments">
+                                    <structure>
+                                        <property name="name">Expression</property>
+                                        <expression name="value" type="javascript">row["LINE"]</expression>
+                                    </structure>
+                                </list-property>
+                                <property name="allowExport">true</property>
+                            </structure>
+                            <structure>
+                                <property name="name">ActLineLenAve</property>
+                                <property name="dataType">float</property>
+                                <simple-property-list name="aggregateOn">
+                                    <value>ActGroup</value>
+                                </simple-property-list>
+                                <property name="aggregateFunction">AVE</property>
+                                <list-property name="arguments">
+                                    <structure>
+                                        <property name="name">Expression</property>
+                                        <expression name="value" type="javascript">row["LineLength"]</expression>
+                                    </structure>
+                                </list-property>
+                                <property name="allowExport">true</property>
+                            </structure>
+                            <structure>
+                                <property name="name">ActWourdCnt</property>
+                                <property name="dataType">float</property>
+                                <simple-property-list name="aggregateOn">
+                                    <value>ActGroup</value>
+                                </simple-property-list>
+                                <property name="aggregateFunction">SUM</property>
+                                <list-property name="arguments">
+                                    <structure>
+                                        <property name="name">Expression</property>
+                                        <expression name="value" type="javascript">row["WordCount"]</expression>
+                                    </structure>
+                                </list-property>
+                                <property name="allowExport">true</property>
+                            </structure>
+                        </list-property>
+                        <column id="733"/>
+                        <column id="734"/>
+                        <column id="768"/>
+                        <column id="735"/>
+                        <column id="736"/>
+                        <header>
+                            <row id="710">
+                                <property name="backgroundColor">#0080C0</property>
+                                <property name="fontWeight">bold</property>
+                                <cell id="711">
+                                    <property name="borderBottomStyle">solid</property>
+                                    <property name="borderBottomWidth">thin</property>
+                                    <property name="borderLeftStyle">solid</property>
+                                    <property name="borderLeftWidth">thin</property>
+                                    <property name="borderRightStyle">solid</property>
+                                    <property name="borderRightWidth">thin</property>
+                                    <property name="borderTopStyle">solid</property>
+                                    <property name="borderTopWidth">thin</property>
+                                    <label id="712">
+                                        <property name="textAlign">center</property>
+                                        <text-property name="text">ACT TITLE</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="713">
+                                    <property name="borderBottomStyle">solid</property>
+                                    <property name="borderBottomWidth">thin</property>
+                                    <property name="borderLeftStyle">solid</property>
+                                    <property name="borderLeftWidth">thin</property>
+                                    <property name="borderRightStyle">solid</property>
+                                    <property name="borderRightWidth">thin</property>
+                                    <property name="borderTopStyle">solid</property>
+                                    <property name="borderTopWidth">thin</property>
+                                    <label id="714">
+                                        <property name="textAlign">center</property>
+                                        <text-property name="text">SPEAKER</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="761">
+                                    <property name="borderBottomStyle">solid</property>
+                                    <property name="borderBottomWidth">thin</property>
+                                    <property name="borderLeftStyle">solid</property>
+                                    <property name="borderLeftWidth">thin</property>
+                                    <property name="borderRightStyle">solid</property>
+                                    <property name="borderRightWidth">thin</property>
+                                    <property name="borderTopStyle">solid</property>
+                                    <property name="borderTopWidth">thin</property>
+                                    <label id="769">
+                                        <property name="textAlign">center</property>
+                                        <text-property name="text">LINE</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="715">
+                                    <property name="borderBottomStyle">solid</property>
+                                    <property name="borderBottomWidth">thin</property>
+                                    <property name="borderLeftStyle">solid</property>
+                                    <property name="borderLeftWidth">thin</property>
+                                    <property name="borderRightStyle">solid</property>
+                                    <property name="borderRightWidth">thin</property>
+                                    <property name="borderTopStyle">solid</property>
+                                    <property name="borderTopWidth">thin</property>
+                                    <label id="716">
+                                        <property name="textAlign">center</property>
+                                        <text-property name="text">LineLength</text-property>
+                                    </label>
+                                </cell>
+                                <cell id="717">
+                                    <property name="borderBottomStyle">solid</property>
+                                    <property name="borderBottomWidth">thin</property>
+                                    <property name="borderLeftStyle">solid</property>
+                                    <property name="borderLeftWidth">thin</property>
+                                    <property name="borderRightStyle">solid</property>
+                                    <property name="borderRightWidth">thin</property>
+                                    <property name="borderTopStyle">solid</property>
+                                    <property name="borderTopWidth">thin</property>
+                                    <label id="718">
+                                        <property name="textAlign">center</property>
+                                        <text-property name="text">WordCount</text-property>
+                                    </label>
+                                </cell>
+                            </row>
+                        </header>
+                        <group id="737">
+                            <property name="groupName">ActGroup</property>
+                            <expression name="keyExpr" type="javascript">row["ACT TITLE"]</expression>
+                            <structure name="toc">
+                                <expression name="expressionValue" type="javascript">row["ACT TITLE"]</expression>
+                            </structure>
+                            <property name="hideDetail">false</property>
+                            <header>
+                                <row id="738">
+                                    <cell id="739">
+                                        <property name="borderBottomStyle">solid</property>
+                                        <property name="borderBottomWidth">thin</property>
+                                        <property name="borderLeftStyle">solid</property>
+                                        <property name="borderLeftWidth">thin</property>
+                                        <property name="borderRightStyle">solid</property>
+                                        <property name="borderRightWidth">thin</property>
+                                        <property name="borderTopStyle">solid</property>
+                                        <property name="borderTopWidth">thin</property>
+                                        <data id="748">
+                                            <property name="resultSetColumn">ACT TITLE</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="740">
+                                        <property name="borderBottomStyle">solid</property>
+                                        <property name="borderBottomWidth">thin</property>
+                                        <property name="borderLeftStyle">solid</property>
+                                        <property name="borderLeftWidth">thin</property>
+                                        <property name="borderRightStyle">solid</property>
+                                        <property name="borderRightWidth">thin</property>
+                                        <property name="borderTopStyle">solid</property>
+                                        <property name="borderTopWidth">thin</property>
+                                    </cell>
+                                    <cell id="762">
+                                        <property name="borderBottomStyle">solid</property>
+                                        <property name="borderBottomWidth">thin</property>
+                                        <property name="borderLeftStyle">solid</property>
+                                        <property name="borderLeftWidth">thin</property>
+                                        <property name="borderRightStyle">solid</property>
+                                        <property name="borderRightWidth">thin</property>
+                                        <property name="borderTopStyle">solid</property>
+                                        <property name="borderTopWidth">thin</property>
+                                    </cell>
+                                    <cell id="741">
+                                        <property name="borderBottomStyle">solid</property>
+                                        <property name="borderBottomWidth">thin</property>
+                                        <property name="borderLeftStyle">solid</property>
+                                        <property name="borderLeftWidth">thin</property>
+                                        <property name="borderRightStyle">solid</property>
+                                        <property name="borderRightWidth">thin</property>
+                                        <property name="borderTopStyle">solid</property>
+                                        <property name="borderTopWidth">thin</property>
+                                    </cell>
+                                    <cell id="742">
+                                        <property name="borderBottomStyle">solid</property>
+                                        <property name="borderBottomWidth">thin</property>
+                                        <property name="borderLeftStyle">solid</property>
+                                        <property name="borderLeftWidth">thin</property>
+                                        <property name="borderRightStyle">solid</property>
+                                        <property name="borderRightWidth">thin</property>
+                                        <property name="borderTopStyle">solid</property>
+                                        <property name="borderTopWidth">thin</property>
+                                    </cell>
+                                </row>
+                            </header>
+                            <footer>
+                                <row id="743">
+                                    <cell id="744">
+                                        <property name="borderBottomStyle">solid</property>
+                                        <property name="borderBottomWidth">thin</property>
+                                        <property name="borderLeftStyle">solid</property>
+                                        <property name="borderLeftWidth">thin</property>
+                                        <property name="borderRightStyle">solid</property>
+                                        <property name="borderRightWidth">thin</property>
+                                        <property name="borderTopStyle">solid</property>
+                                        <property name="borderTopWidth">thin</property>
+                                    </cell>
+                                    <cell id="745">
+                                        <property name="borderBottomStyle">solid</property>
+                                        <property name="borderBottomWidth">thin</property>
+                                        <property name="borderLeftStyle">solid</property>
+                                        <property name="borderLeftWidth">thin</property>
+                                        <property name="borderRightStyle">solid</property>
+                                        <property name="borderRightWidth">thin</property>
+                                        <property name="borderTopStyle">solid</property>
+                                        <property name="borderTopWidth">thin</property>
+                                    </cell>
+                                    <cell id="766">
+                                        <property name="borderBottomStyle">solid</property>
+                                        <property name="borderBottomWidth">thin</property>
+                                        <property name="borderLeftStyle">solid</property>
+                                        <property name="borderLeftWidth">thin</property>
+                                        <property name="borderRightStyle">solid</property>
+                                        <property name="borderRightWidth">thin</property>
+                                        <property name="borderTopStyle">solid</property>
+                                        <property name="borderTopWidth">thin</property>
+                                        <data id="774">
+                                            <structure name="numberFormat">
+                                                <property name="category">Fixed</property>
+                                                <property name="pattern">###0{RoundingMode=HALF_UP}</property>
+                                            </structure>
+                                            <property name="textAlign">right</property>
+                                            <property name="resultSetColumn">ActLineCnt</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="746">
+                                        <property name="borderBottomStyle">solid</property>
+                                        <property name="borderBottomWidth">thin</property>
+                                        <property name="borderLeftStyle">solid</property>
+                                        <property name="borderLeftWidth">thin</property>
+                                        <property name="borderRightStyle">solid</property>
+                                        <property name="borderRightWidth">thin</property>
+                                        <property name="borderTopStyle">solid</property>
+                                        <property name="borderTopWidth">thin</property>
+                                        <data id="775">
+                                            <structure name="numberFormat">
+                                                <property name="category">Fixed</property>
+                                                <property name="pattern">###0{RoundingMode=HALF_UP}</property>
+                                            </structure>
+                                            <property name="textAlign">right</property>
+                                            <property name="resultSetColumn">ActLineLenAve</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="747">
+                                        <property name="borderBottomStyle">solid</property>
+                                        <property name="borderBottomWidth">thin</property>
+                                        <property name="borderLeftStyle">solid</property>
+                                        <property name="borderLeftWidth">thin</property>
+                                        <property name="borderRightStyle">solid</property>
+                                        <property name="borderRightWidth">thin</property>
+                                        <property name="borderTopStyle">solid</property>
+                                        <property name="borderTopWidth">thin</property>
+                                        <data id="776">
+                                            <property name="textAlign">right</property>
+                                            <property name="resultSetColumn">ActWourdCnt</property>
+                                        </data>
+                                    </cell>
+                                </row>
+                            </footer>
+                        </group>
+                        <group id="749">
+                            <property name="groupName">SpeakerGroup</property>
+                            <expression name="keyExpr" type="javascript">row["SPEAKER"]</expression>
+                            <structure name="toc">
+                                <expression name="expressionValue" type="javascript">row["SPEAKER"]</expression>
+                            </structure>
+                            <property name="hideDetail">false</property>
+                            <header>
+                                <row id="750">
+                                    <cell id="751">
+                                        <property name="borderBottomStyle">solid</property>
+                                        <property name="borderBottomWidth">thin</property>
+                                        <property name="borderLeftStyle">solid</property>
+                                        <property name="borderLeftWidth">thin</property>
+                                        <property name="borderRightStyle">solid</property>
+                                        <property name="borderRightWidth">thin</property>
+                                        <property name="borderTopStyle">solid</property>
+                                        <property name="borderTopWidth">thin</property>
+                                    </cell>
+                                    <cell id="752">
+                                        <property name="borderBottomStyle">solid</property>
+                                        <property name="borderBottomWidth">thin</property>
+                                        <property name="borderLeftStyle">solid</property>
+                                        <property name="borderLeftWidth">thin</property>
+                                        <property name="borderRightStyle">solid</property>
+                                        <property name="borderRightWidth">thin</property>
+                                        <property name="borderTopStyle">solid</property>
+                                        <property name="borderTopWidth">thin</property>
+                                        <data id="760">
+                                            <property name="resultSetColumn">SPEAKER</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="763">
+                                        <property name="borderBottomStyle">solid</property>
+                                        <property name="borderBottomWidth">thin</property>
+                                        <property name="borderLeftStyle">solid</property>
+                                        <property name="borderLeftWidth">thin</property>
+                                        <property name="borderRightStyle">solid</property>
+                                        <property name="borderRightWidth">thin</property>
+                                        <property name="borderTopStyle">solid</property>
+                                        <property name="borderTopWidth">thin</property>
+                                        <data id="771">
+                                            <property name="textAlign">right</property>
+                                            <property name="resultSetColumn">SpeakerLineCnt</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="753">
+                                        <property name="borderBottomStyle">solid</property>
+                                        <property name="borderBottomWidth">thin</property>
+                                        <property name="borderLeftStyle">solid</property>
+                                        <property name="borderLeftWidth">thin</property>
+                                        <property name="borderRightStyle">solid</property>
+                                        <property name="borderRightWidth">thin</property>
+                                        <property name="borderTopStyle">solid</property>
+                                        <property name="borderTopWidth">thin</property>
+                                        <data id="772">
+                                            <structure name="numberFormat">
+                                                <property name="category">Fixed</property>
+                                                <property name="pattern">###0{RoundingMode=HALF_UP}</property>
+                                            </structure>
+                                            <property name="textAlign">right</property>
+                                            <property name="resultSetColumn">lineLenAve</property>
+                                        </data>
+                                    </cell>
+                                    <cell id="754">
+                                        <property name="borderBottomStyle">solid</property>
+                                        <property name="borderBottomWidth">thin</property>
+                                        <property name="borderLeftStyle">solid</property>
+                                        <property name="borderLeftWidth">thin</property>
+                                        <property name="borderRightStyle">solid</property>
+                                        <property name="borderRightWidth">thin</property>
+                                        <property name="borderTopStyle">solid</property>
+                                        <property name="borderTopWidth">thin</property>
+                                        <data id="773">
+                                            <property name="resultSetColumn">SpkrAveWordCount</property>
+                                        </data>
+                                    </cell>
+                                </row>
+                            </header>
+                        </group>
+                        <footer>
+                            <row id="728">
+                                <cell id="729">
+                                    <property name="borderBottomStyle">solid</property>
+                                    <property name="borderBottomWidth">thin</property>
+                                    <property name="borderLeftStyle">solid</property>
+                                    <property name="borderLeftWidth">thin</property>
+                                    <property name="borderRightStyle">solid</property>
+                                    <property name="borderRightWidth">thin</property>
+                                    <property name="borderTopStyle">solid</property>
+                                    <property name="borderTopWidth">thin</property>
+                                </cell>
+                                <cell id="730">
+                                    <property name="borderBottomStyle">solid</property>
+                                    <property name="borderBottomWidth">thin</property>
+                                    <property name="borderLeftStyle">solid</property>
+                                    <property name="borderLeftWidth">thin</property>
+                                    <property name="borderRightStyle">solid</property>
+                                    <property name="borderRightWidth">thin</property>
+                                    <property name="borderTopStyle">solid</property>
+                                    <property name="borderTopWidth">thin</property>
+                                </cell>
+                                <cell id="767">
+                                    <property name="borderBottomStyle">solid</property>
+                                    <property name="borderBottomWidth">thin</property>
+                                    <property name="borderLeftStyle">solid</property>
+                                    <property name="borderLeftWidth">thin</property>
+                                    <property name="borderRightStyle">solid</property>
+                                    <property name="borderRightWidth">thin</property>
+                                    <property name="borderTopStyle">solid</property>
+                                    <property name="borderTopWidth">thin</property>
+                                </cell>
+                                <cell id="731">
+                                    <property name="borderBottomStyle">solid</property>
+                                    <property name="borderBottomWidth">thin</property>
+                                    <property name="borderLeftStyle">solid</property>
+                                    <property name="borderLeftWidth">thin</property>
+                                    <property name="borderRightStyle">solid</property>
+                                    <property name="borderRightWidth">thin</property>
+                                    <property name="borderTopStyle">solid</property>
+                                    <property name="borderTopWidth">thin</property>
+                                </cell>
+                                <cell id="732">
+                                    <property name="borderBottomStyle">solid</property>
+                                    <property name="borderBottomWidth">thin</property>
+                                    <property name="borderLeftStyle">solid</property>
+                                    <property name="borderLeftWidth">thin</property>
+                                    <property name="borderRightStyle">solid</property>
+                                    <property name="borderRightWidth">thin</property>
+                                    <property name="borderTopStyle">solid</property>
+                                    <property name="borderTopWidth">thin</property>
+                                </cell>
+                            </row>
+                        </footer>
+                    </table>
+                </cell>
+            </row>
+            <row id="526">
+                <cell id="619"/>
+                <cell id="527"/>
+            </row>
+            <row id="528">
+                <cell id="620"/>
+                <cell id="529"/>
+            </row>
+            <row id="530">
+                <cell id="621"/>
+                <cell id="531"/>
+            </row>
+            <row id="532">
+                <cell id="622"/>
+                <cell id="533"/>
+            </row>
+        </grid>
     </body>
 </report>
